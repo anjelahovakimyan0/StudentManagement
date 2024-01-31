@@ -17,9 +17,6 @@ import java.io.IOException;
 @Controller
 public class MainController {
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Value("${picture.upload.directory}")
     private String uploadDirectory;
 
