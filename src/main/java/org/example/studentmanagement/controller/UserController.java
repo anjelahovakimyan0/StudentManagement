@@ -1,5 +1,6 @@
 package org.example.studentmanagement.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.studentmanagement.entity.User;
 import org.example.studentmanagement.entity.UserType;
 import org.example.studentmanagement.repository.LessonRepository;
@@ -17,14 +18,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequiredArgsConstructor
 public class UserController {
 
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private LessonRepository lessonRepository;
+    private final LessonRepository lessonRepository;
 
     @Value("${picture.upload.directory}")
     private String uploadDirectory;

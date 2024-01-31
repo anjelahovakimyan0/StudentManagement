@@ -1,5 +1,6 @@
 package org.example.studentmanagement.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.studentmanagement.entity.Lesson;
 import org.example.studentmanagement.entity.User;
 import org.example.studentmanagement.entity.UserType;
@@ -17,13 +18,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequiredArgsConstructor
 public class LessonController {
 
-    @Autowired
-    private LessonRepository lessonRepository;
+    private final LessonRepository lessonRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @GetMapping("/lessons")
     public String lessonsPage(ModelMap modelMap) {

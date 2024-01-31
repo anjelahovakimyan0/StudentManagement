@@ -10,7 +10,7 @@
     Surname: <input type="text" name="surname"><br>
     <input type="file" name="picture"><br>
     <select name="lesson.id">
-        <option th:each="user : ${users}" th:text="${user.lesson.title}"
+        <option th:if="${user.lesson != null}" th:each="user : ${users}" th:text="${user.lesson.title}"
                 th:value="${user.lesson.id}"></option>
     </select><br>
     <select name="userType">
