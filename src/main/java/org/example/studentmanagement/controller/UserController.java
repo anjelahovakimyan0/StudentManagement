@@ -5,6 +5,7 @@ import org.example.studentmanagement.entity.User;
 import org.example.studentmanagement.entity.UserType;
 import org.example.studentmanagement.repository.LessonRepository;
 import org.example.studentmanagement.repository.UserRepository;
+import org.example.studentmanagement.util.TypeResolver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
+import static org.example.studentmanagement.util.TypeResolver.resolveType;
 
 @Controller
 @RequiredArgsConstructor
@@ -78,10 +81,7 @@ public class UserController {
             return "updateUser";
         }
         userRepository.save(user);
-        if (user.getUserType() == UserType.TEACHER) {
-            return "redirect:/teachers";
-        }
-        return "redirect:/students";
+        return resolveType(user);
     }
 
     @PostMapping("/users/update")
@@ -97,10 +97,7 @@ public class UserController {
             user.setPicName(byId.get().getPicName());
         }
         userRepository.save(user);
-        if (user.getUserType() == UserType.TEACHER) {
-            return "redirect:/teachers";
-        }
-        return "redirect:/students";
+        return resolveType(user);
     }
 
     @GetMapping("/users/delete/{id}")
@@ -109,10 +106,7 @@ public class UserController {
         if (byId.isPresent()) {
             userRepository.deleteById(id);
         }
-        if (byId.get().getUserType() == UserType.TEACHER) {
-            return "redirect:/teachers";
-        }
-        return "redirect:/students";
+        return resolveType(byId.get());
     }
 
     @GetMapping("/users/image/delete/{id}")
