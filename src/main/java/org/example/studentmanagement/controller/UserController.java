@@ -60,14 +60,8 @@ public class UserController {
             multipartFile.transferTo(file);
             user.setPicName(picName);
         }
-        if (user.getUserType() == UserType.TEACHER) {
-            user.setUserType(UserType.TEACHER);
-            userRepository.save(user);
-            return "redirect:/teachers";
-        }
-        user.setUserType(UserType.STUDENT);
         userRepository.save(user);
-        return "redirect:/students";
+        return resolveType(user);
     }
 
     @GetMapping("/users/update/{id}")
