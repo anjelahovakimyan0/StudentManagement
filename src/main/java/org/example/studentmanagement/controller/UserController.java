@@ -5,7 +5,6 @@ import org.example.studentmanagement.entity.User;
 import org.example.studentmanagement.entity.UserType;
 import org.example.studentmanagement.repository.LessonRepository;
 import org.example.studentmanagement.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
