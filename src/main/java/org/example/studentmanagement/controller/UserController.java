@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class StudentController {
+public class UserController {
+
 
     @Autowired
     private UserRepository userRepository;
@@ -30,46 +31,63 @@ public class StudentController {
 
     @GetMapping("/students")
     public String studentsPage(ModelMap modelMap) {
-        List<User> students = userRepository.findAllByUserType(UserType.STUDENT);
-        modelMap.addAttribute("students", students);
-        return "students";
+        List<User> users = userRepository.findAllByUserType(UserType.STUDENT);
+        modelMap.addAttribute("users", users);
+        return "users";
     }
 
-    @GetMapping("/students/add")
-    public String addStudentPage(ModelMap modelMap) {
-        modelMap.addAttribute("lessons", lessonRepository.findAll());
-        return "addStudent";
+    @GetMapping("/teachers")
+    public String teachersPage(ModelMap modelMap) {
+        List<User> users = userRepository.findAllByUserType(UserType.TEACHER);
+        modelMap.addAttribute("users", users);
+        return "users";
     }
 
-    @PostMapping("/students/add")
-    public String addStudent(@ModelAttribute User user,
-                             @RequestParam("picture") MultipartFile multipartFile) throws IOException {
+    @GetMapping("/users/add")
+    public String addUserPage(ModelMap modelMap) {
+        modelMap.addAttribute("users", userRepository.findAll());
+        return "addUser";
+    }
+
+    @PostMapping("/users/add")
+    public String addUser(@ModelAttribute User user,
+                          @RequestParam("picture") MultipartFile multipartFile) throws IOException {
         if (multipartFile != null && !multipartFile.isEmpty() && !multipartFile.getOriginalFilename().equals("")) {
             String picName = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
             File file = new File(uploadDirectory, picName);
             multipartFile.transferTo(file);
             user.setPicName(picName);
         }
+        if (user.getUserType() == UserType.TEACHER) {
+            user.setUserType(UserType.TEACHER);
+            userRepository.save(user);
+            return "redirect:/teachers";
+        }
         user.setUserType(UserType.STUDENT);
         userRepository.save(user);
         return "redirect:/students";
     }
 
-    @GetMapping("/students/update/{id}")
-    public String updateStudentPage(ModelMap modelMap,
-                                    @PathVariable("id") int id) {
+    @GetMapping("/users/update/{id}")
+    public String updateUserPage(ModelMap modelMap,
+                                 @PathVariable("id") int id) {
         Optional<User> byId = userRepository.findById(id);
+        User user = byId.get();
         if (byId.isPresent()) {
-            modelMap.addAttribute("student", byId.get());
+            modelMap.addAttribute("user", user);
             modelMap.addAttribute("lessons", lessonRepository.findAll());
-            return "updateStudent";
+            return "updateUser";
+        }
+        userRepository.save(user);
+        if (user.getUserType() == UserType.TEACHER) {
+            return "redirect:/teachers";
         }
         return "redirect:/students";
     }
 
-    @PostMapping("/students/update")
-    public String updateStudent(@ModelAttribute User user,
-                                @RequestParam("picture") MultipartFile multipartFile) throws IOException {
+    @PostMapping("/users/update")
+    public String updateUser(@ModelAttribute User user,
+                             @RequestParam("picture") MultipartFile multipartFile) throws IOException {
         if (multipartFile != null && !multipartFile.isEmpty() && !multipartFile.getOriginalFilename().equals("")) {
             String picName = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
             File file = new File(uploadDirectory, picName);
@@ -80,19 +98,25 @@ public class StudentController {
             user.setPicName(byId.get().getPicName());
         }
         userRepository.save(user);
-        return "redirect:/students";
-    }
-
-    @GetMapping("/students/delete/{id}")
-    public String deleteLesson(@PathVariable("id") int id) {
-        Optional<User> byId = userRepository.findById(id);
-        if (byId.isPresent()) {
-            userRepository.deleteById(id);
+        if (user.getUserType() == UserType.TEACHER) {
+            return "redirect:/teachers";
         }
         return "redirect:/students";
     }
 
-    @GetMapping("/students/image/delete/{id}")
+    @GetMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable("id") int id) {
+        Optional<User> byId = userRepository.findById(id);
+        if (byId.isPresent()) {
+            userRepository.deleteById(id);
+        }
+        if (byId.get().getUserType() == UserType.TEACHER) {
+            return "redirect:/teachers";
+        }
+        return "redirect:/students";
+    }
+
+    @GetMapping("/users/image/delete/{id}")
     public String deleteImage(@PathVariable("id") int id) {
         Optional<User> byId = userRepository.findById(id);
         if (byId.isPresent()) {
@@ -107,6 +131,6 @@ public class StudentController {
                 }
             }
         }
-        return "redirect:/students/update/" + id;
+        return "redirect:/users/update/" + id;
     }
 }

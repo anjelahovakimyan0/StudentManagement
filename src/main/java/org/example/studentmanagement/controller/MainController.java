@@ -1,8 +1,6 @@
 package org.example.studentmanagement.controller;
 
 import org.apache.commons.io.IOUtils;
-import org.example.studentmanagement.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
