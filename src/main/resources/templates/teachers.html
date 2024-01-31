@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View All Teachers</title>
+</head>
+<body>
+Teachers | <a href="/teachers/add">Add Teacher</a>
+<table border="1">
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>surname</th>
+        <th>picName</th>
+        <th>lesson title</th>
+        <th>user type</th>
+        <th>update</th>
+        <th>delete</th>
+    </tr>
+    <tr th:each="teacher : ${teachers}">
+        <td th:text="${teacher.id}"></td>
+        <td th:text="${teacher.name}"></td>
+        <td th:text="${teacher.surname}"></td>
+        <td>
+            <img th:if="${teacher.picName != null}" th:src="@{/getImage(picName=${teacher.picName})}" width="40">
+        </td>
+        <td th:if="${teacher.lesson != null}" th:text="${teacher.lesson.title}"></td>
+        <td th:if="${teacher.lesson == null}">No lesson yet</td>
+        <td th:text="${teacher.userType}"></td>
+        <td><a th:href="@{'/teachers/update/' + ${teacher.id}}">Update</a></td>
+        <td><a th:href="@{'/teachers/delete/' + ${teacher.id}}">Delete</a></td>
+    </tr>
+</table>
+</body>
+</html>
