@@ -23,8 +23,10 @@ Lessons | <a href="/lessons/add">Add Lesson</a>
         <td th:text="${lesson.duration}"></td>
         <td th:text="${lesson.price}"></td>
         <td th:text="${#dates.format(lesson.startDate, 'dd-MM-yyyy')}"></td>
-        <td th:if="${lesson.user != null}" th:text="${lesson.user.name}"></td>
-        <td th:if="${lesson.user == null}">No teacher yet</td>
+        <td>
+            <span th:if="${lesson.user != null}" th:text="${lesson.user.name}"></span>
+            <span th:if="${lesson.user == null}">No teacher yet</span>
+        </td>
         <td><a th:href="@{'/lessons/update/' + ${lesson.id}}">Update</a></td>
         <td><a th:href="@{'/lessons/delete/' + ${lesson.id}}">Delete</a></td>
     </tr>

@@ -24,8 +24,10 @@ Users | <a href="/users/add">Add User</a>
         <td>
             <img th:if="${user.picName != null}" th:src="@{/getImage(picName=${user.picName})}" width="40">
         </td>
-        <td th:if="${user.lesson != null}" th:text="${user.lesson.title}"></td>
-        <td th:if="${user.lesson == null}">No lesson yet</td>
+        <td>
+            <span th:if="${user.lesson != null}" th:text="${user.lesson.title}"></span>
+            <span th:if="${user.lesson == null}">No lesson yet</span>
+        </td>
         <td th:text="${user.userType}"></td>
         <td><a th:href="@{'/users/update/' + ${user.id}}">Update</a></td>
         <td><a th:href="@{'/users/delete/' + ${user.id}}">Delete</a></td>
