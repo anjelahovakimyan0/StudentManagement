@@ -5,7 +5,9 @@
     <title>View All Lessons</title>
 </head>
 <body>
-Lessons | <a href="/lessons/add">Add Lesson</a>
+<th:block th:include="/fragment/headerFragment::userInfo"/>
+
+Lessons <a th:if="${currentUser != null && currentUser.userType == 'TEACHER'}"  href="/lessons/add"> | Add Lesson</a>
 <table border="1">
     <tr>
         <th>id</th>

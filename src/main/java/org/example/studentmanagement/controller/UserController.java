@@ -5,8 +5,9 @@ import org.example.studentmanagement.entity.User;
 import org.example.studentmanagement.entity.UserType;
 import org.example.studentmanagement.repository.LessonRepository;
 import org.example.studentmanagement.repository.UserRepository;
-import org.example.studentmanagement.util.TypeResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +24,12 @@ import static org.example.studentmanagement.util.TypeResolver.resolveType;
 @RequiredArgsConstructor
 public class UserController {
 
-
     private final UserRepository userRepository;
 
     private final LessonRepository lessonRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Value("${picture.upload.directory}")
     private String uploadDirectory;
@@ -45,23 +48,32 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping("/users/add")
-    public String addUserPage(ModelMap modelMap) {
-        modelMap.addAttribute("users", userRepository.findAll());
-        return "addUser";
+    @GetMapping("/users/register")
+    public String registerUserPage(@RequestParam(value = "msg", required = false) String msg,
+                                   ModelMap modelMap) {
+        if (msg != null && !msg.isEmpty()) {
+            modelMap.addAttribute("msg", msg);
+        }
+        modelMap.addAttribute("lessons", lessonRepository.findAll());
+        return "register";
     }
 
-    @PostMapping("/users/add")
-    public String addUser(@ModelAttribute User user,
-                          @RequestParam("picture") MultipartFile multipartFile) throws IOException {
+    @PostMapping("/users/register")
+    public String registerUser(@ModelAttribute User user,
+                               @RequestParam("picture") MultipartFile multipartFile) throws IOException {
+        Optional<User> byEmail = userRepository.findByEmail(user.getEmail());
+        if (byEmail.isPresent()) {
+            return "redirect:/users/register?msg=User already exists!";
+        }
         if (multipartFile != null && !multipartFile.isEmpty() && !multipartFile.getOriginalFilename().equals("")) {
             String picName = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
             File file = new File(uploadDirectory, picName);
             multipartFile.transferTo(file);
             user.setPicName(picName);
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return resolveType(user);
+        return "redirect:/users/register?msg=User Registered!";
     }
 
     @GetMapping("/users/update/{id}")

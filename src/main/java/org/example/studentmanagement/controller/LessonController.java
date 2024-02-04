@@ -6,6 +6,8 @@ import org.example.studentmanagement.entity.User;
 import org.example.studentmanagement.entity.UserType;
 import org.example.studentmanagement.repository.LessonRepository;
 import org.example.studentmanagement.repository.UserRepository;
+import org.example.studentmanagement.security.SpringUser;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +40,9 @@ public class LessonController {
     }
 
     @PostMapping("/lessons/add")
-    public String addLesson(@ModelAttribute Lesson lesson) {
+    public String addLesson(@ModelAttribute Lesson lesson,
+                            @AuthenticationPrincipal SpringUser springUser) {
+        lesson.setUser(springUser.getUser());
         lessonRepository.save(lesson);
         return "redirect:/lessons";
     }

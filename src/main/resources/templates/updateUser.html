@@ -5,13 +5,15 @@
     <title>Update User</title>
 </head>
 <body>
+<th:block th:include="/fragment/headerFragment::userInfo"/>
+
 <form action="/users/update" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" th:value="${user.id}">
     Name: <input type="text" name="name" th:value="${user.name}"><br>
     Surname: <input type="text" name="surname" th:value="${user.surname}"><br>
     <input type="file" name="picture"><br>
     <select name="lesson.id">
-        <option th:each="lesson : ${lessons}" th:selected="user.lesson.id == lesson.id"
+        <option th:if="${user.lesson != null}" th:each="lesson : ${lessons}" th:selected="user.lesson.id == lesson.id"
                 th:text="${lesson.title}" th:value="${lesson.id}"></option>
     </select><br>
     <select name="userType">

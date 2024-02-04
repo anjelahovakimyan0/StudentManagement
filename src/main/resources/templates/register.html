@@ -5,19 +5,23 @@
     <title>Add User</title>
 </head>
 <body>
-<form action="/users/add" method="post" enctype="multipart/form-data">
+<span th:if="${msg != null}" style="color: red" th:text="${msg}"></span>
+
+<form action="/users/register" method="post" enctype="multipart/form-data">
     Name: <input type="text" name="name"><br>
     Surname: <input type="text" name="surname"><br>
+    Email: <input type="email" name="email"><br>
+    Password: <input type="password" name="password"><br>
     <input type="file" name="picture"><br>
     <select name="lesson.id">
-        <option th:if="${user.lesson != null}" th:each="user : ${users}" th:text="${user.lesson.title}"
-                th:value="${user.lesson.id}"></option>
+        <option th:each="lesson : ${lessons}" th:text="${lesson.title}"
+                th:value="${lesson.id}"></option>
     </select><br>
     <select name="userType">
         <option value="TEACHER">TEACHER</option>
         <option value="STUDENT">STUDENT</option>
     </select>
-    <input type="submit" value="Add">
+    <input type="submit" value="Register">
 </form>
 </body>
 </html>

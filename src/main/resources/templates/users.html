@@ -5,7 +5,9 @@
     <title>View All Users</title>
 </head>
 <body>
-Users | <a href="/users/add">Add User</a>
+<th:block th:include="/fragment/headerFragment::userInfo"/>
+
+Users <a th:if="${currentUser != null && currentUser.userType == 'TEACHER'}" href="/users/add"> | Add User</a>
 <table border="1">
     <tr>
         <th>id</th>
