@@ -7,7 +7,7 @@
 <body>
 <th:block th:include="/fragment/headerFragment::userInfo"/>
 
-Users <a th:if="${currentUser != null && currentUser.userType == 'TEACHER'}" href="/users/add"> | Add User</a>
+Users <a th:if="${currentUser != null && currentUser.userType.name() == 'TEACHER'}" href="/users/add"> | Add User</a>
 <table border="1">
     <tr>
         <th>id</th>

@@ -28,8 +28,7 @@ public class UserController {
 
     private final LessonRepository lessonRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${picture.upload.directory}")
     private String uploadDirectory;

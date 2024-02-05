@@ -1,5 +1,6 @@
 package org.example.studentmanagement.config;
 
+import lombok.RequiredArgsConstructor;
 import org.example.studentmanagement.entity.UserType;
 import org.example.studentmanagement.security.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserDetailService userDetailsService;
+    private final UserDetailService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
