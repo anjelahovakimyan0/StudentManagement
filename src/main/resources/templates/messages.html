@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View My Messages</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <th>id</th>
+        <th>message</th>
+        <th>from</th>
+        <th>sent datetime</th>
+    </tr>
+    <tr th:each="message : ${messages}">
+        <td th:text="${message.id}"></td>
+        <td th:text="${message.messageText}"></td>
+        <td th:text="${message.from.name}"></td>
+        <td th:text="${#dates.format(message.dateTime, 'yyyy-MM-dd hh:mm')}"></td>
+    </tr>
+</table>
+</body>
+</html>

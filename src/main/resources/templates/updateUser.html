@@ -11,14 +11,17 @@
     <input type="hidden" name="id" th:value="${user.id}">
     Name: <input type="text" name="name" th:value="${user.name}"><br>
     Surname: <input type="text" name="surname" th:value="${user.surname}"><br>
+    Email: <input type="email" name="email" th:value="${user.email}"><br>
+    <input type="hidden" name="password">
     <input type="file" name="picture"><br>
     <select name="lesson.id">
         <option th:if="${user.lesson != null}" th:each="lesson : ${lessons}" th:selected="user.lesson.id == lesson.id"
                 th:text="${lesson.title}" th:value="${lesson.id}"></option>
+        <option th:each="lesson : ${lessons}" th:text="${lesson.title}" th:value="${lesson.id}"></option>
     </select><br>
     <select name="userType">
-        <option th:selected="${user.userType == 'STUDENT'}">STUDENT</option>
-        <option th:selected="${user.userType == 'TEACHER'}">TEACHER</option>
+        <option value="STUDENT" th:selected="${user.userType.name() == 'STUDENT'}">STUDENT</option>
+        <option value="TEACHER" th:selected="${user.userType.name() == 'TEACHER'}">TEACHER</option>
     </select><br>
     <input type="submit" value="Update">
 </form>

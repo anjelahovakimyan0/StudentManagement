@@ -3,7 +3,6 @@ package org.example.studentmanagement.config;
 import lombok.RequiredArgsConstructor;
 import org.example.studentmanagement.entity.UserType;
 import org.example.studentmanagement.security.UserDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -26,14 +25,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/users/register").permitAll()
-                .requestMatchers("/lessons/add").hasAnyAuthority(UserType.TEACHER.name())
+                .requestMatchers("/lessons").permitAll()
+                .requestMatchers("/lessons/**").hasAnyAuthority(UserType.TEACHER.name())
                 .requestMatchers("/teachers/add").hasAnyAuthority(UserType.TEACHER.name())
                 .requestMatchers("/students/add").hasAnyAuthority(UserType.TEACHER.name())
+                .requestMatchers("/messages/send").hasAnyAuthority(UserType.STUDENT.name())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .defaultSuccessUrl("/home", true)
                 .and()
-                .logout();
+                .logout()
+                .logoutSuccessUrl("/");
         return httpSecurity.build();
     }
 

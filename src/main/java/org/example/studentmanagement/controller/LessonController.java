@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.studentmanagement.entity.Lesson;
 import org.example.studentmanagement.entity.User;
 import org.example.studentmanagement.entity.UserType;
-import org.example.studentmanagement.repository.LessonRepository;
 import org.example.studentmanagement.repository.UserRepository;
 import org.example.studentmanagement.security.SpringUser;
+import org.example.studentmanagement.service.LessonService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,40 +16,41 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class LessonController {
 
-    private final LessonRepository lessonRepository;
+    private final LessonService lessonService;
 
     private final UserRepository userRepository;
 
     @GetMapping("/lessons")
     public String lessonsPage(ModelMap modelMap) {
-        modelMap.addAttribute("lessons", lessonRepository.findAll());
+        modelMap.addAttribute("lessons", lessonService.findAll());
         return "lessons";
     }
 
     @GetMapping("/lessons/add")
-    public String addLessonPage(ModelMap modelMap) {
-        List<User> teachers = userRepository.findAllByUserType(UserType.TEACHER);
-        modelMap.addAttribute("teachers", teachers);
-        return "addLesson";
+    public String addLessonPage(ModelMap modelMap, @AuthenticationPrincipal SpringUser springUser) {
+        if (springUser.getUser().getUserType() == UserType.TEACHER) {
+            List<User> teachers = userRepository.findAllByUserType(UserType.TEACHER);
+            modelMap.addAttribute("teachers", teachers);
+            return "addLesson";
+        }
+        return "redirect:/home";
     }
 
     @PostMapping("/lessons/add")
     public String addLesson(@ModelAttribute Lesson lesson,
                             @AuthenticationPrincipal SpringUser springUser) {
-        lesson.setUser(springUser.getUser());
-        lessonRepository.save(lesson);
+        lessonService.save(lesson, springUser);
         return "redirect:/lessons";
     }
 
     @GetMapping("/lessons/update/{id}")
     public String updateLessonPage(ModelMap modelMap, @PathVariable("id") int id) {
-        modelMap.addAttribute("lesson", lessonRepository.findById(id).get());
+        modelMap.addAttribute("lesson", lessonService.findById(id).get());
         List<User> teachers = userRepository.findAllByUserType(UserType.TEACHER);
         modelMap.addAttribute("teachers", teachers);
         return "updateLesson";
@@ -57,20 +58,20 @@ public class LessonController {
 
     @PostMapping("/lessons/update")
     public String updateLesson(@ModelAttribute Lesson lesson) {
-        if (lesson.getStartDate() == null) {
-            Optional<Lesson> byId = lessonRepository.findById(lesson.getId());
-            lesson.setStartDate(byId.get().getStartDate());
-        }
-        lessonRepository.save(lesson);
+        lessonService.update(lesson);
         return "redirect:/lessons";
     }
 
     @GetMapping("/lessons/delete/{id}")
     public String deleteLesson(@PathVariable("id") int id) {
-        Optional<Lesson> byId = lessonRepository.findById(id);
-        if (byId.isPresent()) {
-            lessonRepository.deleteById(id);
-        }
+        lessonService.deleteById(id);
         return "redirect:/lessons";
+    }
+
+    @GetMapping("/lessons/singleLesson/{id}")
+    public String singleLesson(ModelMap modelMap,
+                               @PathVariable("id") int id) {
+        modelMap.addAttribute("lesson", lessonService.findById(id).get());
+        return "singleLesson";
     }
 }

@@ -20,6 +20,11 @@ public class MainController {
 
     @GetMapping("/")
     public String mainPage() {
+        return "main";
+    }
+
+    @GetMapping("/home")
+    public String homePage() {
         return "home";
     }
 

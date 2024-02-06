@@ -22,9 +22,9 @@ public class User {
 
     private String picName;
 
-    @ManyToOne
-    private Lesson lesson;
-
     @Enumerated(EnumType.STRING)
     private UserType userType;
+
+    @ManyToOne
+    private Lesson lesson;
 }

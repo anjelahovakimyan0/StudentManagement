@@ -2,13 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>View All Lessons</title>
+    <title>View Single Lesson</title>
 </head>
 <body>
 <th:block th:include="/fragment/headerFragment::userInfo"/>
 
-Lessons <a th:if="${currentUser != null && currentUser.userType.name() == 'TEACHER'}" href="/lessons/add"> | Add
-    Lesson</a>
 <table border="1">
     <tr>
         <th>id</th>
@@ -17,10 +15,10 @@ Lessons <a th:if="${currentUser != null && currentUser.userType.name() == 'TEACH
         <th>price</th>
         <th>start date</th>
         <th>teacher name</th>
-        <th th:if="${currentUser.userType.name() == 'TEACHER'}">update</th>
-        <th th:if="${currentUser.userType.name() == 'TEACHER'}">delete</th>
+        <th>update</th>
+        <th>delete</th>
     </tr>
-    <tr th:each="lesson : ${lessons}">
+    <tr>
         <td th:text="${lesson.id}"></td>
         <td th:text="${lesson.title}"></td>
         <td th:text="${lesson.duration}"></td>
@@ -30,10 +28,8 @@ Lessons <a th:if="${currentUser != null && currentUser.userType.name() == 'TEACH
             <span th:if="${lesson.user != null}" th:text="${lesson.user.name}"></span>
             <span th:if="${lesson.user == null}">No teacher yet</span>
         </td>
-        <td th:if="${currentUser.userType.name() == 'TEACHER'}"><a
-                th:href="@{'/lessons/update/' + ${lesson.id}}">Update</a></td>
-        <td th:if="${currentUser.userType.name() == 'TEACHER'}"><a
-                th:href="@{'/lessons/delete/' + ${lesson.id}}">Delete</a></td>
+        <td><a th:href="@{'/lessons/update/' + ${lesson.id}}">Update</a></td>
+        <td><a th:href="@{'/lessons/delete/' + ${lesson.id}}">Delete</a></td>
     </tr>
 </table>
 </body>
