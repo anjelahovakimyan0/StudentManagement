@@ -25,7 +25,11 @@ public class UserController {
     private final LessonService lessonService;
 
     @GetMapping("/students")
-    public String studentsPage(ModelMap modelMap) {
+    public String studentsPage(ModelMap modelMap,
+                               @RequestParam(value = "msg", required = false) String msg) {
+        if (msg != null && !msg.isEmpty()) {
+            modelMap.addAttribute("msg", msg);
+        }
         List<User> users = userService.findAllByUserType(UserType.STUDENT);
         modelMap.addAttribute("users", users);
         return "users";

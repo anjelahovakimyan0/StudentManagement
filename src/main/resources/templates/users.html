@@ -11,8 +11,9 @@ Users | <a href="/users/add">Add User</a><br>
 
 <div th:if="${currentUser.userType.name() == 'STUDENT'}">
     <a th:href="@{'/messages/' + ${currentUser.id}}">My messages</a>
-    <a href="/messages/send"> | Send Message</a>
 </div>
+<br>
+<span th:if="${msg != null}" th:text="${msg}" style="color: red"></span>
 <table border="1">
     <tr>
         <th>id</th>
@@ -24,6 +25,7 @@ Users | <a href="/users/add">Add User</a><br>
         <th>user type</th>
         <th>update</th>
         <th>delete</th>
+        <th th:if="${currentUser.userType.name() == 'STUDENT'}">Send Message</th>
     </tr>
     <tr th:each="user : ${users}">
         <td th:text="${user.id}"></td>
@@ -42,6 +44,9 @@ Users | <a href="/users/add">Add User</a><br>
         <td th:text="${user.userType}"></td>
         <td><a th:href="@{'/users/update/' + ${user.id}}">Update</a></td>
         <td><a th:href="@{'/users/delete/' + ${user.id}}">Delete</a></td>
+        <td th:if="${currentUser.userType.name() == 'STUDENT'}">
+            <a th:if="${user != currentUser}" th:href="@{'/messages/send/' + ${user.id}}">Send Message</a>
+        </td>
     </tr>
 </table>
 </body>

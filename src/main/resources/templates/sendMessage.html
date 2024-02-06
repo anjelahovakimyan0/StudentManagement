@@ -5,14 +5,10 @@
     <title>Send Message</title>
 </head>
 <body>
-<span th:if="${msg != null}" th:text="${msg}" style="color: red"></span>
-
 <form action="/messages/send" method="post">
     Message:<br>
     <textarea name="messageText" placeholder="Please input message"></textarea><br>
-    <select name="to.id">
-        <option th:if="${user != currentUser}" th:each="user : ${users}" th:text="${user.name}" th:value="${user.id}"></option>
-    </select>
+    <input type="hidden" name="to.id" th:value="${id}">
     <input type="submit" value="Send">
 </form>
 </body>
