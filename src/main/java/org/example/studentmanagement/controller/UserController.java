@@ -18,6 +18,7 @@ import static org.example.studentmanagement.util.TypeResolver.resolveType;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -42,7 +43,7 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping("/users/register")
+    @GetMapping("/register")
     public String registerUserPage(@RequestParam(value = "msg", required = false) String msg,
                                    ModelMap modelMap) {
         if (msg != null && !msg.isEmpty()) {
@@ -52,7 +53,7 @@ public class UserController {
         return "register";
     }
 
-    @PostMapping("/users/register")
+    @PostMapping("/register")
     public String registerUser(@ModelAttribute User user,
                                @RequestParam("picture") MultipartFile multipartFile) throws IOException {
         Optional<User> byEmail = userService.findByEmail(user.getEmail());
@@ -63,7 +64,7 @@ public class UserController {
         return "redirect:/users/register?msg=User Registered!";
     }
 
-    @GetMapping("/users/update/{id}")
+    @GetMapping("/update/{id}")
     public String updateUserPage(ModelMap modelMap,
                                  @PathVariable("id") int id) {
         Optional<User> byId = userService.findById(id);
@@ -76,14 +77,14 @@ public class UserController {
         return resolveType(user);
     }
 
-    @PostMapping("/users/update")
+    @PostMapping("/update")
     public String updateUser(@ModelAttribute User user,
                              @RequestParam("picture") MultipartFile multipartFile) throws IOException {
         userService.update(user, multipartFile);
         return resolveType(user);
     }
 
-    @GetMapping("/users/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") int id) {
         Optional<User> byId = userService.findById(id);
         if (byId.isPresent()) {
@@ -92,7 +93,7 @@ public class UserController {
         return resolveType(byId.get());
     }
 
-    @GetMapping("/users/image/delete/{id}")
+    @GetMapping("/image/delete/{id}")
     public String deleteImage(@PathVariable("id") int id) {
         userService.deleteImage(id);
         return "redirect:/users/update/" + id;
