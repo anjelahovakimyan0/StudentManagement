@@ -56,8 +56,7 @@ public class UserController {
     @PostMapping("/register")
     public String registerUser(@ModelAttribute User user,
                                @RequestParam("picture") MultipartFile multipartFile) throws IOException {
-        Optional<User> byEmail = userService.findByEmail(user.getEmail());
-        if (byEmail.isPresent()) {
+        if (userService.findByEmail(user.getEmail()).isPresent()) {
             return "redirect:/users/register?msg=User already exists!";
         }
         userService.save(user, multipartFile);
@@ -69,12 +68,12 @@ public class UserController {
                                  @PathVariable("id") int id) {
         Optional<User> byId = userService.findById(id);
         User user = byId.get();
-        if (byId.isPresent()) {
-            modelMap.addAttribute("user", user);
-            modelMap.addAttribute("lessons", lessonService.findAll());
-            return "updateUser";
+        if (byId.isEmpty()) {
+            return resolveType(user);
         }
-        return resolveType(user);
+        modelMap.addAttribute("user", user);
+        modelMap.addAttribute("lessons", lessonService.findAll());
+        return "updateUser";
     }
 
     @PostMapping("/update")

@@ -25,10 +25,10 @@ public class MessageController {
                                @PathVariable("id") int id,
                                @AuthenticationPrincipal SpringUser springUser) {
         if (springUser.getUser().getId() == id) {
-            modelMap.addAttribute("messages", messageService.findAllByToId(id));
+            modelMap.addAttribute("messages", messageService.findAllByFromId(id));
             return "messages";
         }
-        return "users";
+        return "redirect:/students";
     }
 
     @GetMapping("/send/{id}")

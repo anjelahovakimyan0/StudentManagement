@@ -7,12 +7,14 @@ import org.example.studentmanagement.entity.UserType;
 import org.example.studentmanagement.repository.UserRepository;
 import org.example.studentmanagement.security.SpringUser;
 import org.example.studentmanagement.service.LessonService;
+import org.example.studentmanagement.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class LessonController {
 
     private final LessonService lessonService;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping("")
     public String lessonsPage(ModelMap modelMap) {
@@ -30,10 +32,9 @@ public class LessonController {
     }
 
     @GetMapping("/add")
-    public String addLessonPage(ModelMap modelMap, @AuthenticationPrincipal SpringUser springUser) {
+    public String addLessonPage(ModelMap modelMap,
+                                @AuthenticationPrincipal SpringUser springUser) {
         if (springUser.getUser().getUserType() == UserType.TEACHER) {
-            List<User> teachers = userRepository.findAllByUserType(UserType.TEACHER);
-            modelMap.addAttribute("teachers", teachers);
             return "addLesson";
         }
         return "redirect:/home";
@@ -47,9 +48,14 @@ public class LessonController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateLessonPage(ModelMap modelMap, @PathVariable("id") int id) {
-        modelMap.addAttribute("lesson", lessonService.findById(id).get());
-        List<User> teachers = userRepository.findAllByUserType(UserType.TEACHER);
+    public String updateLessonPage(ModelMap modelMap,
+                                   @PathVariable("id") int id) {
+        Optional<Lesson> byId = lessonService.findById(id);
+        if (byId.isEmpty()) {
+            return "redirect:/lessons";
+        }
+        modelMap.addAttribute("lesson", byId.get());
+        List<User> teachers = userService.findAllByUserType(UserType.TEACHER);
         modelMap.addAttribute("teachers", teachers);
         return "updateLesson";
     }
@@ -69,7 +75,11 @@ public class LessonController {
     @GetMapping("/singleLesson/{id}")
     public String singleLesson(ModelMap modelMap,
                                @PathVariable("id") int id) {
-        modelMap.addAttribute("lesson", lessonService.findById(id).get());
+        Optional<Lesson> byId = lessonService.findById(id);
+        if (byId.isEmpty()) {
+            return "redirect:/lessons";
+        }
+        modelMap.addAttribute("lesson", byId.get());
         return "singleLesson";
     }
 }

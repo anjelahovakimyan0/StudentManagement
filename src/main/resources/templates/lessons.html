@@ -7,8 +7,9 @@
 <body>
 <th:block th:include="/fragment/headerFragment::userInfo"/>
 
-Lessons <a th:if="${currentUser != null && currentUser.userType.name() == 'TEACHER'}" href="/lessons/add"> | Add
-    Lesson</a>
+Lessons <a th:if="${currentUser != null && currentUser.userType.name() == 'TEACHER'}"
+           href="/lessons/add"> | Add Lesson</a>
+
 <table border="1">
     <tr>
         <th>id</th>
@@ -22,7 +23,9 @@ Lessons <a th:if="${currentUser != null && currentUser.userType.name() == 'TEACH
     </tr>
     <tr th:each="lesson : ${lessons}">
         <td th:text="${lesson.id}"></td>
-        <td th:text="${lesson.title}"></td>
+        <td>
+            <a th:href="@{'/lessons/singleLesson/' + ${lesson.id}}" th:text="${lesson.title}"></a>
+        </td>
         <td th:text="${lesson.duration}"></td>
         <td th:text="${lesson.price}"></td>
         <td th:text="${#dates.format(lesson.startDate, 'dd-MM-yyyy')}"></td>

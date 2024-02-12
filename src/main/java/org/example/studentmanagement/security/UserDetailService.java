@@ -2,7 +2,6 @@ package org.example.studentmanagement.security;
 
 import lombok.RequiredArgsConstructor;
 import org.example.studentmanagement.entity.User;
-import org.example.studentmanagement.repository.UserRepository;
 import org.example.studentmanagement.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

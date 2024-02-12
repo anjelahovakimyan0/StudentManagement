@@ -34,11 +34,13 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public void update(Lesson lesson) {
-        if (lesson.getStartDate() == null) {
-            Optional<Lesson> byId = findById(lesson.getId());
-            lesson.setStartDate(byId.get().getStartDate());
+        Optional<Lesson> byId = findById(lesson.getId());
+        if (byId.isPresent()) {
+            if (lesson.getStartDate() == null) {
+                lesson.setStartDate(byId.get().getStartDate());
+            }
+            lessonRepository.save(lesson);
         }
-        lessonRepository.save(lesson);
     }
 
     @Override

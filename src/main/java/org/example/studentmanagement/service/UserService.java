@@ -23,6 +23,4 @@ public interface UserService {
     void deleteById(int id);
 
     void deleteImage(int id);
-
-    List<User> findAll();
 }

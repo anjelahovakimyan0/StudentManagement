@@ -26,18 +26,21 @@ public class MessageServiceImpl implements MessageService {
     public Message save(Message message, SpringUser springUser) {
         User fromUser = springUser.getUser();
         Optional<User> toUserOpt = userService.findById(message.getTo().getId());
-        if (toUserOpt.get().getUserType() == UserType.STUDENT &&
-                fromUser.getLesson().equals(toUserOpt.get().getLesson())) {
-            message.setFrom(fromUser);
-            message.setTo(toUserOpt.get());
-            message.setDateTime(new Date());
-            return messageRepository.save(message);
+        if (toUserOpt.isPresent()) {
+            User toUser = toUserOpt.get();
+            if (toUser.getUserType() == UserType.STUDENT &&
+                    fromUser.getLesson().equals(toUser.getLesson())) {
+                message.setFrom(fromUser);
+                message.setTo(toUser);
+                message.setDateTime(new Date());
+                return messageRepository.save(message);
+            }
         }
         return null;
     }
 
     @Override
-    public List<Message> findAllByToId(int id) {
-        return messageRepository.findAllByTo_Id(id);
+    public List<Message> findAllByFromId(int id) {
+        return messageRepository.findAllByFrom_Id(id);
     }
 }

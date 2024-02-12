@@ -12,15 +12,18 @@ Users | <a href="/users/add">Add User</a><br>
 <div th:if="${currentUser.userType.name() == 'STUDENT'}">
     <a th:href="@{'/messages/' + ${currentUser.id}}">My messages</a>
 </div>
+
 <br>
+
 <span th:if="${msg != null}" th:text="${msg}" style="color: red"></span>
+
 <table border="1">
     <tr>
         <th>id</th>
         <th>name</th>
         <th>surname</th>
         <th>email</th>
-        <th>picName</th>
+        <th>picture</th>
         <th>lesson title</th>
         <th>user type</th>
         <th>update</th>

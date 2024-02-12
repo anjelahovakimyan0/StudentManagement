@@ -9,8 +9,8 @@ public class TypeResolver {
 
     public static String resolveType(User user) {
         if (user.getUserType() == UserType.TEACHER) {
-            return "redirect:/teachers";
+            return "redirect:/users/teachers";
         }
-        return "redirect:/students";
+        return "redirect:/users/students";
     }
 }

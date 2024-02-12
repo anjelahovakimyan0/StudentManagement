@@ -9,5 +9,5 @@ public interface MessageService {
 
     Message save(Message message, SpringUser springUser);
 
-    List<Message> findAllByToId(int id);
+    List<Message> findAllByFromId(int id);
 }
