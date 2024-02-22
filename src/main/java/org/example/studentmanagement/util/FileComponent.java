@@ -1,16 +1,20 @@
 package org.example.studentmanagement.util;
 
-import lombok.experimental.UtilityClass;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-@UtilityClass
+@Component
 public class FileComponent {
 
-    public static byte[] getImage(String picName, String uploadDirectory) throws IOException {
+    @Value("${picture.upload.directory}")
+    private String uploadDirectory;
+
+    public byte[] getImage(String picName) throws IOException {
         File file = new File(uploadDirectory, picName);
         if (file.exists()) {
             return IOUtils.toByteArray(new FileInputStream(file));

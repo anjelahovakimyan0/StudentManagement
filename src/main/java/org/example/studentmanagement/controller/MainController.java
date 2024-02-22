@@ -2,7 +2,6 @@ package org.example.studentmanagement.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.studentmanagement.util.FileComponent;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +14,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class MainController {
 
-    @Value("${picture.upload.directory}")
-    private String uploadDirectory;
+    private final FileComponent fileComponent;
 
     @GetMapping("/")
     public String mainPage() {
@@ -30,6 +28,6 @@ public class MainController {
 
     @GetMapping(value = "/getImage", produces = MediaType.IMAGE_JPEG_VALUE)
     public @ResponseBody byte[] getImage(@RequestParam("picName") String picName) throws IOException {
-        return FileComponent.getImage(picName, uploadDirectory);
+        return fileComponent.getImage(picName);
     }
 }
